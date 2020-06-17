@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using JZ.Core.Models;
 using Microsoft.EntityFrameworkCore;
+using JZ.DapperManager;
 
 namespace JZ.Core.WebAPI
 {
@@ -27,9 +28,17 @@ namespace JZ.Core.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //原生方法获取数据库
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<SchoolsDBContext>(options =>
             options.UseSqlServer(connectionString));
+            //注入Dapper
+            services.AddDapper("SqlDb", m =>
+            {
+                m.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+                m.DbType = DbStoreType.SqlServer;
+            });
+
 
             services.AddControllers();
         }

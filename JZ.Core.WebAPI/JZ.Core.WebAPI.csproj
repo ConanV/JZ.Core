@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\JZ.Core.Models\JZ.Core.Models.csproj" />
     <ProjectReference Include="..\JZ.Core.Utility\JZ.Core.Utility.csproj" />
+    <ProjectReference Include="..\JZ.DapperManager\JZ.DapperManager.csproj" />
   </ItemGroup>
 
 

@@ -3,11 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JZ.Core.Models", "JZ.Core.Models\JZ.Core.Models.csproj", "{0CBCC90C-E9DD-4597-9D6A-9A145F1D0E98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JZ.Core.Models", "JZ.Core.Models\JZ.Core.Models.csproj", "{0CBCC90C-E9DD-4597-9D6A-9A145F1D0E98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JZ.Core.WebAPI", "JZ.Core.WebAPI\JZ.Core.WebAPI.csproj", "{1C102FF4-8B2E-4BA0-8F6E-3F786E9DF188}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JZ.Core.WebAPI", "JZ.Core.WebAPI\JZ.Core.WebAPI.csproj", "{1C102FF4-8B2E-4BA0-8F6E-3F786E9DF188}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JZ.Core.Utility", "JZ.Core.Utility\JZ.Core.Utility.csproj", "{C390B76A-8C41-4831-875C-22287F25B65E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JZ.Core.Utility", "JZ.Core.Utility\JZ.Core.Utility.csproj", "{C390B76A-8C41-4831-875C-22287F25B65E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JZ.DapperManager", "JZ.DapperManager\JZ.DapperManager.csproj", "{B58C4E10-53C9-4443-9DA2-5F2C1A6252F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{278710DC-FCDE-48CB-AB4F-A6C50B88A5FA}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +34,10 @@ Global
 		{C390B76A-8C41-4831-875C-22287F25B65E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C390B76A-8C41-4831-875C-22287F25B65E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C390B76A-8C41-4831-875C-22287F25B65E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B58C4E10-53C9-4443-9DA2-5F2C1A6252F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B58C4E10-53C9-4443-9DA2-5F2C1A6252F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B58C4E10-53C9-4443-9DA2-5F2C1A6252F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B58C4E10-53C9-4443-9DA2-5F2C1A6252F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
