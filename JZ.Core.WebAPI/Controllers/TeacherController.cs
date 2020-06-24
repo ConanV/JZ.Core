@@ -39,7 +39,10 @@ namespace JZ.Core.WebAPI.Controllers
 
             return result;
         }
-
+        /// <summary>
+        /// 获取老师列表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetTeachersList_D")]
         public ResponseMessage<List<T_Teacher>> GetTeachersList_D()
         {

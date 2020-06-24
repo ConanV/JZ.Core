@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JZ.Core.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="M:JZ.Core.WebAPI.Controllers.TeacherController.GetTeachersList_D">
+            <summary>
+            获取老师列表
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

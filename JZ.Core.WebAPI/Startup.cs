@@ -18,6 +18,8 @@ using log4net;
 using log4net.Config;
 using JZ.Core.Utility.Log4Net;
 using System.IO;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace JZ.Core.WebAPI
 {
@@ -48,6 +50,25 @@ namespace JZ.Core.WebAPI
             XmlConfigurator.Configure(repository, new FileInfo("config/log4net.config"));
             Log4NetRepository.loggerRepository = repository;
 
+            #region 注册 Swagger
+            services.AddSwaggerGen(sg =>
+            {
+                sg.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v0.1.0",
+                    Title = "JZ.Core.WebAPI",
+                    Description = "JZ.Core.WebAPI框架说明文档",
+                });
+                //添加读取注释服务
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                sg.IncludeXmlComments(xmlPath);
+                var xmlFile2 = $"JZ.Core.Models.xml";
+                var xmlPath2 = Path.Combine(AppContext.BaseDirectory, xmlFile2);
+                sg.IncludeXmlComments(xmlPath2);
+            });
+            #endregion
+
             services.AddControllers(opt =>
             {//全局异常捕获
                 opt.Filters.Add<ApiExceptionFilter>();
@@ -61,6 +82,17 @@ namespace JZ.Core.WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            #region 注册Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiHelp V1");
+                c.RoutePrefix = "";//路径配置，设置为空，表示直接访问该文件，
+                                   //路径配置，设置为空，表示直接在根域名（localhost:8001）访问该文件,注意localhost:8001/swagger是访问不到的，
+                                   //这个时候去launchSettings.json中把"launchUrl": "swagger/index.html"去掉， 然后直接访问localhost:8001/index.html即可
+            });
+            #endregion
 
             app.UseHttpsRedirection();
 

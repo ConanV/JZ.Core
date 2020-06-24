@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JZ.Core.Models</name>
+    </assembly>
+    <members>
+        <member name="T:JZ.Core.Models.T_Class">
+            <summary>
+            班级
+            </summary>
+        </member>
+        <member name="P:JZ.Core.Models.T_Class.F_ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:JZ.Core.Models.T_Class.F_ClassName">
+            <summary>
+            班级名称
+            </summary>
+        </member>
+        <member name="P:JZ.Core.Models.T_Class.Teacher">
+            <summary>
+            班主任
+            </summary>
+        </member>
+        <member name="T:JZ.Core.Models.T_Teacher">
+            <summary>
+            老师
+            </summary>
+        </member>
+        <member name="P:JZ.Core.Models.T_Teacher.F_ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:JZ.Core.Models.T_Teacher.F_TeacherName">
+            <summary>
+            老师名称
+            </summary>
+        </member>
+    </members>
+</doc>
