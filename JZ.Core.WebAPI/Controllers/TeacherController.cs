@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using JZ.Core.Utility;
 using JZ.Core.Models;
 using JZ.DapperManager;
+using Dapper;
+using log4net.Core;
+using JZ.Core.Utility.Log4Net;
 
 namespace JZ.Core.WebAPI.Controllers
 {
@@ -51,6 +54,7 @@ namespace JZ.Core.WebAPI.Controllers
         [HttpGet("GetTeachersListById_D")]
         public ResponseMessage<T_Teacher> GetTeachersListById_D(int id)
         {
+            //LogHelper.Info("测试GetTeachersListById_D");
             dynamic result;
             var m = _SqlDB.QueryFirst<T_Teacher>("SELECT * FROM T_Teacher WHERE F_ID =@id", new { id });
 
@@ -72,8 +76,8 @@ namespace JZ.Core.WebAPI.Controllers
             return result;
         }
 
-        [HttpGet("InsertTeacher")]
-        public ResponseMessage<object> InsertTeacher()
+        [HttpGet("InsertTeacher_D")]
+        public ResponseMessage<object> InsertTeacher_D()
         {
             dynamic result;
             var teacher = new T_Teacher()
@@ -90,6 +94,34 @@ namespace JZ.Core.WebAPI.Controllers
 
             return result;
         }
+
+        [HttpGet("TeacherTestTrans_D")]
+        public ResponseMessage<object> TeacherTestTrans_D()
+        {
+            dynamic result;
+            var teacher = new T_Teacher()
+            {
+                F_TeacherName = $"Test_{ (DateTime.Now.Ticks - 621356256000000000) / 10000}"
+            };
+          
+
+            var bl=  _SqlDB.ExecuteWithTransaction((conn, trans) =>
+            {
+                var r = conn.Execute($"INSERT INTO T_Teacher (F_TeacherName) VALUES(@F_TeacherName);", teacher, trans, null, null);
+                r += conn.Execute("delete from T_Teacher where f_id=@id", new { id = 1 }, trans, null, null);
+
+                return r;
+            });
+
+            if (bl)
+                result = CreateResult.For();
+            else
+                result = CreateResult.For("00001", "新增出现错误");
+
+            return result;
+        }
+
+
 
         [HttpGet("GetClassAndTeachersListByName_D")]
         public ResponseMessage<List<T_Class>> GetClassAndTeachersListByName_D(string name)

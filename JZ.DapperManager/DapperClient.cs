@@ -67,7 +67,7 @@ namespace JZ.DapperManager
         /// <param name="strSQL">SQL语句</param>
         /// <param name="param">查询参数model</param>
         /// <returns></returns>
-        public virtual List<T> Query<T>(string strSQL, object? param = null)
+        public virtual List<T> Query<T>(string strSQL, object? param = null) where T : class, new()
         {
             using (IDbConnection conn = Connection)
             {
@@ -100,7 +100,7 @@ namespace JZ.DapperManager
         /// <param name="strSQL">SQL语句</param>
         /// <param name="param">查询参数model</param>
         /// <returns></returns>
-        public virtual async Task<List<T>> QueryAsync<T>(string strSQL, object? param = null)
+        public virtual async Task<List<T>> QueryAsync<T>(string strSQL, object? param = null) where T : class, new()
         {
             using (IDbConnection conn = Connection)
             {
@@ -123,7 +123,7 @@ namespace JZ.DapperManager
         /// <typeparam name="T"></typeparam>
         /// <param name="strSQL">SQL语句</param>
         /// <returns></returns>
-        public virtual T QueryFirst<T>(string strSQL)
+        public virtual T QueryFirst<T>(string strSQL) where T : class, new()
         {
             using (IDbConnection conn = Connection)
             {
@@ -136,7 +136,7 @@ namespace JZ.DapperManager
         /// <typeparam name="T"></typeparam>
         /// <param name="strSQL">SQL语句</param>
         /// <returns></returns>
-        public virtual async Task<T> QueryFirstAsync<T>(string strSQL)
+        public virtual async Task<T> QueryFirstAsync<T>(string strSQL) where T : class, new()
         {
             using (IDbConnection conn = Connection)
             {
@@ -152,7 +152,7 @@ namespace JZ.DapperManager
         /// <param name="strSQL">SQL语句</param>
         /// <param name="param">查询参数model</param>
         /// <returns></returns>
-        public virtual T QueryFirst<T>(string strSQL, object param)
+        public virtual T QueryFirst<T>(string strSQL, object param) where T : class, new()
         {
             using (IDbConnection conn = Connection)
             {
@@ -166,7 +166,7 @@ namespace JZ.DapperManager
         /// <param name="strSQL">SQL语句</param>
         /// <param name="param">查询参数model</param>
         /// <returns></returns>
-        public virtual async Task<T> QueryFirstAsync<T>(string strSQL, object param)
+        public virtual async Task<T> QueryFirstAsync<T>(string strSQL, object param) where T : class, new()
         {
             using (IDbConnection conn = Connection)
             {
@@ -187,6 +187,40 @@ namespace JZ.DapperManager
                 return conn.Execute(strSQL, param);
             }
         }
+
+
+
+        public virtual bool ExecuteWithTransaction(Func<IDbConnection, IDbTransaction, int> func)
+        {
+            var r = 0;
+
+            using (IDbConnection conn = Connection)
+            {
+                conn.Open();
+                using (IDbTransaction trans = conn.BeginTransaction(IsolationLevel.ReadCommitted))
+                {
+                    try
+                    {
+                        r = func(trans.Connection, trans);
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        throw;
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                }
+            }
+
+            return r > 0;
+        }
+
+
+
         /// <summary>
         /// 执行存储过程返回影响的条数
         /// </summary>
@@ -197,6 +231,14 @@ namespace JZ.DapperManager
             using (IDbConnection conn = Connection)
             {
                 return conn.Execute(strProcedure, null, null, null, CommandType.StoredProcedure);
+            }
+        }
+
+        public virtual List<T> QueryStoredProcedure<T>(string strProcedure, object? param = null) where T : class, new()
+        {
+            using (IDbConnection conn = Connection)
+            {
+                return conn.Query<T>(strProcedure, param, null, true, null, CommandType.StoredProcedure).AsList();
             }
         }
     }
