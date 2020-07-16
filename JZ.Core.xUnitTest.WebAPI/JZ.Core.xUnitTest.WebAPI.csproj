@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JZ.Core.WebAPI\JZ.Core.WebAPI.csproj" />
+    <ProjectReference Include="..\JZ.IdentityServer\JZ.IdentityServer.csproj" />
   </ItemGroup>
 
 </Project>

@@ -11,11 +11,12 @@ using JZ.DapperManager;
 using Dapper;
 using log4net.Core;
 using JZ.Core.Utility.Log4Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JZ.Core.WebAPI.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    //[ApiController]
     public class TeacherController : ControllerBase
     {
         private readonly SchoolsDBContext _dbContext;
@@ -39,6 +40,7 @@ namespace JZ.Core.WebAPI.Controllers
 
             return result;
         }
+
         /// <summary>
         /// 获取老师列表
         /// </summary>
@@ -55,6 +57,7 @@ namespace JZ.Core.WebAPI.Controllers
         }
 
         [HttpGet("GetTeachersListById_D")]
+        [AllowAnonymous]
         public ResponseMessage<T_Teacher> GetTeachersListById_D(int id)
         {
             //LogHelper.Info("测试GetTeachersListById_D");

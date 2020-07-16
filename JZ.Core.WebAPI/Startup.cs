@@ -20,6 +20,7 @@ using JZ.Core.Utility.Log4Net;
 using System.IO;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JZ.Core.WebAPI
 {
@@ -36,13 +37,33 @@ namespace JZ.Core.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+           services.AddAuthentication("Bearer")
+           .AddJwtBearer("Bearer", options =>
+           {
+               options.Authority = "https://localhost:44300";
+
+               options.TokenValidationParameters = new TokenValidationParameters
+               {
+                   ValidateAudience = false
+               };
+           });
+           services.AddAuthorization(options =>
+           {
+                options.AddPolicy("ApiScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "api1");
+                });
+           });
+
+
             //原生方法获取数据库
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<SchoolsDBContext>(options =>options.UseSqlServer(connectionString));
             //注入Dapper
             services.AddDapper("SqlDb", m =>
             {
-                m.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+                m.ConnectionString = connectionString;
                 m.DbType = DbStoreType.SqlServer;
             });
             //log4net
@@ -58,14 +79,10 @@ namespace JZ.Core.WebAPI
                     Version = "v0.1.0",
                     Title = "JZ.Core.WebAPI",
                     Description = "JZ.Core.WebAPI框架说明文档",
-                });
+                }) ;
                 //添加读取注释服务
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                sg.IncludeXmlComments(xmlPath);
-                var xmlFile2 = $"JZ.Core.Models.xml";
-                var xmlPath2 = Path.Combine(AppContext.BaseDirectory, xmlFile2);
-                sg.IncludeXmlComments(xmlPath2);
+                sg.IncludeXmlComments(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+                sg.IncludeXmlComments(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "JZ.Core.Models.xml"));
             });
             #endregion
 
@@ -98,11 +115,13 @@ namespace JZ.Core.WebAPI
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers()
+                    .RequireAuthorization("ApiScope");
             });
 
         }
